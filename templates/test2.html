@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+ <html lang="en">
+ 
+ <head>
+     <meta charset="utf-8">
+
+    <script  src="{{ url_for('static', filename='js/jquery-1.11.0.min.js') }}" ></script>
+    <!-- This is the Javascript file of jqGrid -->
+    <script  src="{{ url_for('static', filename='js/jquery.jqGrid.min.js') }}" ></script>
+
+    <!-- This is the localization file of the grid controlling messages, labels, etc. -->
+    <script  src="{{ url_for('static', filename='js/i18n/grid.locale-en.js') }}" ></script>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <!-- The link to the CSS
+     <script  src="{{ url_for('static', filename='css/ui.jqgrid.css') }}" ></script>
+    <script  src="{{ url_for('static', filename='css/ui.jqgrid-bootstrap-ui.css') }}" ></script>
+    that the grid needs -->
+        <script  src="{{ url_for('static', filename='css/ui.jqgrid-bootstrap.css') }}" ></script>
+
+	<script>
+		$.jgrid.defaults.width = 780;
+	</script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	<script>
+		$.jgrid.defaults.width = 780;
+		$.jgrid.defaults.responsive = true;
+		$.jgrid.defaults.styleUI = 'Bootstrap';
+	</script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <title>jqGrid Loading Data - Dialogs - Edit, Add, Delete</title>
+</head>
+
+<body>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#jqGrid").jqGrid({
+                url: 'data.json',
+				// we set the changes to be made at client side using predefined word clientArray
+                editurl: 'clientArray',
+                datatype: "json",
+                colModel: [
+                    {
+						label: 'Customer ID',
+                        name: 'CustomerID',
+                        width: 75,
+						key: true,
+						editable: true,
+						editrules : { required: true}
+                    },
+                    {
+						label: 'Company Name',
+                        name: 'CompanyName',
+                        width: 140,
+                        editable: true // must set editable to true if you want to make the field editable
+                    },
+                    {
+						label : 'Phone',
+                        name: 'Phone',
+                        width: 100,
+                        editable: true
+                    },
+                    {
+						label: 'Postal Code',
+                        name: 'PostalCode',
+                        width: 80,
+                        editable: true
+                    },
+                    {
+						label: 'City',
+                        name: 'City',
+                        width: 140,
+                        editable: true
+                    }
+                ],
+				sortname: 'CustomerID',
+				sortorder : 'asc',
+				loadonce: true,
+				viewrecords: true,
+                height: 200,
+                rowNum: 10,
+                pager: "#jqGridPager"
+            });
+
+            $('#jqGrid').navGrid('#jqGridPager',
+                // the buttons to appear on the toolbar of the grid
+                { edit: true, add: true, del: true, search: false, refresh: false, view: false, position: "left", cloneToTop: false },
+                // options for the Edit Dialog
+                {
+                    editCaption: "The Edit Dialog",
+                    recreateForm: true,
+					checkOnUpdate : true,
+					checkOnSubmit : true,
+                    closeAfterEdit: true,
+                    errorTextFormat: function (data) {
+                        return 'Error: ' + data.responseText
+                    }
+                },
+                // options for the Add Dialog
+                {
+                    closeAfterAdd: true,
+                    recreateForm: true,
+                    errorTextFormat: function (data) {
+                        return 'Error: ' + data.responseText
+                    }
+                },
+                // options for the Delete Dailog
+                {
+                    errorTextFormat: function (data) {
+                        return 'Error: ' + data.responseText
+                    }
+                });
+        });
+
+    </script>
+
+
+
+     <div class="container">
+         <form  action="/run_algorithm"  method="post" role="form" enctype="multipart/form-data">
+             <h2>Please Enter The Parameters </h2>
+	     <div>
+             <input type="number" name="num_vehicles" placeholder="Number of vehicles" required>
+             <input type="text" name="demands" style="width:400px;" placeholder="Capacities of locations: [8, 10, 9, 15]" required>
+	     </div>
+	     <div>
+             <input type="text" id="destination_addresses" style="width:400px;" placeholder="Destination Addresses" >
+
+             <div style="margin-left:20px">
+             <table id="jqGrid"></table>
+             <div id="jqGridPager"></div>
+             </div>
+
+             <input type="button" value="Add address" onclick="appendRow()" />
+            <hr />
+            <table id="Address_Table" style="width:100%">
+                  <tr>
+                    <th>Location ID</th>
+                    <th>Address</th>
+                    <th>Capacity</th>
+                    <th>Delivery</th>
+                    <th>From Time</th>
+                    <th>To Time</th>
+                    <th>Delete Item</th>
+
+                  </tr>
+                <tbody id="rows">
+                </tbody>
+
+
+                </table>
+
+
+	     </div>
+
+             <input type="submit" value="Submit">
+	</form>
+         <form action="/reset" method="post" role="form">
+             <input type="submit" value="Reset DB">
+         </form>
+	</br>      
+     </div>
+
+
+
+
+
+   <script type="text/javascript">
+
+        $(document).ready(function() {
+        var t = $('#example').DataTable();
+        var counter = 1;
+
+        $('#addRow').on( 'click', function () {
+            t.row.add( [
+                counter +'.1',
+                counter +'.2',
+                counter +'.3',
+                counter +'.4',
+                counter +'.5'
+            ] ).draw( false );
+
+            counter++;
+        } );
+
+        // Automatically add a first row of data
+        $('#addRow').click();
+        } );
+    </script>
+   <script type="text/javascript">
+        function appendRow() {
+            var table = document.getElementById("Address_Table");
+
+            var number_of_rows = table.rows.length
+
+
+            // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+
+
+            var newRow = document.createElement("tr");
+
+            var newCell = document.createElement("td");
+            newCell.innerHTML = number_of_rows;
+            newRow.append(newCell);
+
+
+            var newCell = document.createElement("td");
+            var name = "location" + number_of_rows
+            var location = document.getElementById("destination_addresses").value
+            // newCell.innerHTML = <input type="textarea" name="' + name + '"' + 'value=' + location + '>';
+            newRow.append(newCell);
+
+
+            var newCell = document.createElement("td");
+            var name = "capacity" + number_of_rows
+            newCell.innerHTML = '<input type="number" name="' + name + '"' + 'value=0>';
+            newRow.append(newCell);
+
+            var newCell = document.createElement("td");
+            var name = "delivery" + number_of_rows
+            newCell.innerHTML = '<input type="number" name="' + name + '">';
+            newRow.append(newCell);
+
+            var newCell = document.createElement("td");
+            var name = "from_time" + number_of_rows
+            newCell.innerHTML = '<input type="time" name="' + name + '"';
+            newRow.append(newCell);
+
+            var newCell = document.createElement("td");
+            var name = "to_time" + number_of_rows
+            newCell.innerHTML = '<input type="time" name="' + name + '">';
+            newRow.append(newCell);
+
+            var newCell = document.createElement("td");
+            var name = "delete" + number_of_rows
+            console.log(this)
+            newCell.innerHTML = '<input type="button" name="' + name + '"' + 'value=delete onClick=delete_row(this)>';
+            newRow.append(newCell);
+
+            document.getElementById("rows").appendChild(newRow);
+            document.getElementById("destination_addresses").value = '';
+
+
+        }
+        function delete_row(row) {
+            var index = row.parentNode.parentNode.rowIndex;
+            document.getElementById("myTable").deleteRow(index);
+        }
+
+    </script>
+
+ </body>
+ 
+ </html>
