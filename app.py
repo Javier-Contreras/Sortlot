@@ -6,8 +6,10 @@ from src.CVRP.db_connection import get_all_vehicles
 from src.CVRP.db_connection import get_all_locations_depot
 from src.CVRP.db_connection import set_locations_dst_shipping
 from src.CVRP.db_connection import set_locations_depot_shipping
+from src.CVRP.db_connection import set_vehicles_shipping
 
-from src.CVRP.db_connection import get_locations_shipping
+
+from src.CVRP.db_connection import get_shipping_data
 from datetime import datetime
 
 import json
@@ -17,19 +19,16 @@ from flask_table import Table, Col
 
 from src.format_json import format_dst
 from src.format_json import format_depot
-# Declare your table
-class ItemTable(Table):
-    name = Col('Name')
-    description = Col('Description')
+from src.format_json import format_vehicle
 
 
-# Get some objects
-
-
+name = ""
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    locations = get_all_locations_dst()
+    # return render_template('index.html')
+    return render_template('index.html', locations = locations)
 
 
 
@@ -41,37 +40,30 @@ def locations_dst():
 
 @app.route('/locations_depot', methods=['POST'])
 def locations_depot():
+    global name
+    name = request.form['name']
+    
     f = request.form['json']
     
     locations_dst = format_dst(f)
 
-    print(locations_dst)
-    set_locations_dst_shipping(locations_dst)
-    current_date = datetime.now().date().strftime("%d/%m/%Y") # Formato: 01/12/2020
-
-    data = get_locations_shipping(current_date)
-    print("Intentando recuperar los datos")
-    print(data[0])
+    set_locations_dst_shipping(locations_dst, name)
+    
     locations = get_all_locations_depot()
     return render_template('locations_depot.html', locations = locations)
 
 
 @app.route('/vehicles', methods=['POST'])
 def vehicles():
+    global name
+
     f = request.form['json']
-    
     locations_depot = format_depot(f)
 
-    print(locations_depot)
-    set_locations_depot_shipping(locations_depot)
-    current_date = datetime.now().date().strftime("%d/%m/%Y") # Formato: 01/12/2020
+    set_locations_depot_shipping(locations_depot, name)
 
-    data = get_locations_shipping(current_date)
-    print("Intentando recuperar los datos")
-    print(data[0])
     vehicles = get_all_vehicles()
-    print("B"*10)
-    print(vehicles)
+
     return render_template('vehicles.html', vehicles = vehicles)
 
 
@@ -85,7 +77,16 @@ def reset():
 
 @app.route('/run_algorithm', methods=['POST'])
 def run_algorithm():
-    return str(request.files['json'])
+    global name
+    f = request.form['json']
+
+    vehicles = format_vehicle(f)
+
+    set_vehicles_shipping(vehicles, name)
+    solution, data = main(name)
+    if not data:
+        return solution
+    return str(solution['routes'])
 
 
 @app.route('/confirm_data', methods=['POST'])
