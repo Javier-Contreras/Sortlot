@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 from src.VRP.main import main
 from src.VRP.dao.db_connection import reset_db
+from src.VRP.dao.solution_DAO import get_data
 from src.VRP.dao.db_connection import get_all_locations_dst
 from src.VRP.dao.db_connection import get_all_vehicles
 from src.VRP.dao.db_connection import get_all_locations_depot
@@ -17,7 +18,6 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    #return render_template('solution.html')
     return render_template('index.html')
 
 
@@ -25,7 +25,6 @@ def index():
 @app.route('/locations_dst')
 def locations_dst():
     locations = get_all_locations_dst()
-    print(locations)
     return render_template('locations_dst.html', locations = locations)
 
 @app.route('/locations_depot', methods=['POST'])
@@ -36,6 +35,7 @@ def locations_depot():
     set_locations_dst_shipping(locations_dst, name)
     
     locations = get_all_locations_depot()
+    print(locations)
 
     return render_template('locations_depot.html', locations = locations, name=name)
 
@@ -49,7 +49,6 @@ def vehicles():
     set_locations_depot_shipping(locations_depot, name)
 
     vehicles = get_all_vehicles()
-
     return render_template('vehicles.html', vehicles = vehicles, name = name)
 
 
@@ -69,13 +68,16 @@ def run_algorithm():
 
     set_vehicles_shipping(vehicles, name)
     solution, data = main(name)
-    return str(solution)
     if not data:
         return solution
-    return str(solution)
+    #data = get_data(name)
+    locations = get_all_locations_depot()
+    #return render_template('locations_depot.html', locations = locations, name=name)
+
+    return render_template('solution.html', data = data, solution=solution)
 
 
 
 
 if __name__ == "__main__":
-    app.run(port=8080, debug=True)
+    app.run(debug=True)
