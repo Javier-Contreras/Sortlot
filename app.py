@@ -4,6 +4,8 @@ from src.VRP.dao.db_connection import reset_db
 from src.VRP.dao.db_connection import get_all_locations_dst
 from src.VRP.dao.db_connection import get_all_vehicles
 from src.VRP.dao.db_connection import get_all_locations_depot
+from src.VRP.dao.db_connection import get_location_by_province
+
 from src.VRP.dao.shipment_DAO import set_locations_dst_shipping
 from src.VRP.dao.shipment_DAO import set_locations_depot_shipping
 from src.VRP.dao.shipment_DAO import set_vehicles_shipping
@@ -23,35 +25,19 @@ def index():
 
     name = ""
     json_locations_dst = None
+
     return render_template('index.html')
 
 
 @app.route('/locations_dst')
 def locations_dst(error_msg="",data=None):
     global name, json_locations_dst
+    
     if data!=None :
         locations = data
+        print(data)
     else: 
         locations = get_all_locations_dst()
-
-    """print("locations_dst: "+name)
-                try:
-                    print("recoge json")
-                    json_locations_dst = json.loads(request.form['json'])
-                except:
-                    print("exception json")
-            
-                    file_json = None
-                if file_json != None:
-                    print("cargando")
-                    return render_template('locations_dst.html', locations=file_json, name=name, error_msg=error_msg)
-            
-                if json_locations_dst != None:
-                    print("Cached")
-                    locations = json_locations_dst
-                else:
-                    locations = get_all_locations_dst()"""
-    #return render_template('TestMaps.html', locations = locations, name = name)
 
     return render_template('locations_dst.html', locations=locations, name=name, error_msg=error_msg)
 
@@ -62,7 +48,6 @@ def locations_depot():
 
 
     name = request.form['name']
-    json_locations_dst = json.loads(request.form['json'])
     locations_dst = json.loads(request.form['json'])
     set_locations_dst_shipping(locations_dst, name)
     
@@ -71,12 +56,21 @@ def locations_depot():
 
     return render_template('locations_depot.html', locations=locations, name=name)
 
+@app.route('/get_data/<province>', methods=['GET'])
+def get_data(province):
+    global name, json_locations_dst
+    print(province)
+    locations_by_province = json.dumps(get_location_by_province(province))
+
+    print(locations_by_province)
+
+    return locations_by_province
+
 
 @app.route('/vehicles', methods=['POST'])
 def vehicles():
     global name
     name = request.form['name']
-    print("locations_dst: "+name)
 
     locations_depot = json.loads(request.form['json'])
 
