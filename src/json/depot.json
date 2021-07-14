@@ -1,0 +1,23 @@
+//
+// depot.json
+// src
+//
+// Created by Javier Contreras el 13/03/2021
+// Escuela Técnica Superior de Ingenieros de Telecomunicación
+// Universidad Politécnica de Madrid
+// 
+
+[
+   {
+   
+      "name": "Estación de Madrid-Abroñigal",
+      "address": "C. de Méndez Álvaro, 84, 28053 Madrid",
+      "coordinates": [
+            40.387009, 
+            -3.673262
+      ],
+      "use": true,
+      "province": "Madrid"
+            
+   }	
+]

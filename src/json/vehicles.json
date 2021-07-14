@@ -1,0 +1,23 @@
+//
+// vehicles.json
+// src
+//
+// Created by Javier Contreras el 13/03/2021
+// Escuela Técnica Superior de Ingenieros de Telecomunicación
+// Universidad Politécnica de Madrid
+// 
+
+{
+	"vehicles":[
+		{"registration":"2425 AHJ", "capacity": "5", "use": "True"},
+		{"registration":"2425 FHS", "capacity": "5", "use": "True"},
+		{"registration":"4765 FDG", "capacity": "5", "use": "True"},
+		{"registration":"2456 SDS", "capacity": "5", "use": "True"},
+		{"registration":"2347 ASF", "capacity": "5", "use": "True"},
+		{"registration":"9678 CDS", "capacity": "8", "use": "True"},
+		{"registration":"2356 HGH", "capacity": "8", "use": "True"},
+		{"registration":"0987 BGF", "capacity": "8", "use": "True"},
+		{"registration":"1221 DFS", "capacity": "8", "use": "True"},
+		{"registration":"4538 NHG", "capacity": "8", "use": "True"}
+	]
+}

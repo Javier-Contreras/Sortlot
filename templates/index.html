@@ -1,0 +1,61 @@
+<!-- 
+  index.html
+  templates
+
+  Created by Javier Contreras el 13/03/2021
+  Escuela Técnica Superior de Ingenieros de Telecomunicación
+  Universidad Politécnica de Madrid
+ -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>VRP</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  </head>
+
+  <body>
+    <br>
+
+    <h1 class="col-md-12 text-center" style="color: black">VRP</h1>
+    <br>
+    <div>
+        <form  action="/locations_dst" method="get" role="form" enctype="multipart/form-data">	   
+          <input id="btn1" type="submit" class="btn btn-dark" value="New">
+        </form>
+
+
+
+        <form action="/reset" method="post" role="form">
+          <input id="btn2" type="submit" class="btn btn-dark" value="Reset DB">
+        </form>
+
+    </div>
+    <script></script>
+    <style>
+
+      #btn1 {
+        display: inline-block;
+        width: 150px;
+        height: 150px;
+        box-sizing: border-box;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-left: 60px;
+      } 
+      #btn2 {
+        display: inline-block;
+        width: 150px;
+        height: 150px;
+        box-sizing: border-box;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-left: -210px;
+      } 
+    </style>
+  </body>
+</html>

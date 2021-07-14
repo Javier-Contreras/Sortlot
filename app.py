@@ -1,3 +1,12 @@
+#
+# app.py
+# 
+#
+# Created by Javier Contreras el 13/03/2021
+# Escuela Técnica Superior de Ingenieros de Telecomunicación
+# Universidad Politécnica de Madrid
+# 
+
 from flask import Flask, render_template, request
 from src.VRP.main import main
 from src.VRP.dao.db_connection import reset_db
